@@ -15,30 +15,21 @@ let l_icon = document.querySelector('#icon')
 let inputCity = document.querySelector('#inputCity')
 inputCity.addEventListener('change', GetData)
 
-function GetData(){
+async function GetData(){
     SetUrl()
-    fetch(url)
-        .then(data=>{
-            console.log(data)
-            if(data.ok){
-                data.json()
-                    .then(data=>{
-                        console.log(data)
-                        //console.log(data['main']['temp'])
-                        //console.log(data['weather'][0]['description'])
+    let data = await fetch(url)
+    if(!data.ok){
+        console.log("Ошибка")
+        return
+    }
 
-                        console.log(data.main.temp)
-                        console.log(data.weather[0].description)
-                        temp = data.main.temp
-                        feelsLike = data.main.feels_like
-                        desc = data.weather[0].description
-                        wind = data.wind.speed
-                        icon = data.weather[0].icon
-                        GetDataWeather(temp, feelsLike, desc, wind, icon)
-                    })
-            }
-        })
-        
+    let json = await data.json()
+    temp = json.main.temp
+    feelsLike = json.main.feels_like
+    desc = json.weather[0].description
+    wind = json.wind.speed
+    icon = json.weather[0].icon
+    GetDataWeather(temp, feelsLike, desc, wind, icon)
 }
 function GetDataWeather(_temp, _feelsLike, _desc, _wind, _icon){
     console.log(_temp,_feelsLike,_desc,_wind,_icon)
